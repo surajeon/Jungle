@@ -40,6 +40,49 @@ RSpec.describe User, type: :model do
       expect(@password_min_length.errors.full_messages).to eql(["Password is too short (minimum is 6 characters)"])
     end
 
+    describe '.authenticate_with_credentials' do
+
+      it 'should match password and email' do
+        user = User.create(first_name: 'Sura', last_name: 'Jeon',
+          email: 'sura@sura.com', password: 'surajeon',
+          password_confirmation: 'surajeon')
+  
+        session = User.authenticate_with_credentials('sura@sura.com', 'surajeon')
+        puts session
+        puts user
+        expect(session).to eq user
+      end
+  
+      it 'with space in front of email should match' do
+        user = User.create(first_name: 'Sura', last_name: 'Jeon',
+          email: 'sura@sura.com', password: 'surajeon',
+          password_confirmation: 'surajeon')
+  
+        session = User.authenticate_with_credentials(' sura@sura.com', 'surajeon')
+        expect(session).to eq user
+      end
+  
+      it 'with space at the end of the email should still match' do
+        user = User.create(first_name: 'Sura', last_name: 'Jeon',
+          email: 'sura@sura.com', password: 'surajeon',
+          password_confirmation: 'surajeon')
+  
+        session = User.authenticate_with_credentials('sura@sura.com ', 'surajeon')
+        expect(session).to eq user
+      end
+  
+      it 'match for lower/upper cases' do
+        user = User.create(first_name: 'Sura', last_name: 'Jeon',
+          email: 'sura@sura.com', password: 'surajeon',
+          password_confirmation: 'surajeon')
+  
+        session = User.authenticate_with_credentials('Sura@sUra.coM', 'surajeon')
+        expect(session).to eq user
+      end
+  
+
+    end
+
   end
 
 end
