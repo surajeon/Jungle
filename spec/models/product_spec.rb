@@ -2,9 +2,17 @@ require 'rails_helper'
 
 RSpec.describe Product, type: :model do
   describe 'Validations' do
+    it "is valid with all attributes" do
+      @category = Category.new(name: "fruit")
+      @product = Product.new(name: 'apple', price: 2, quantity: 4, category: @category)
+      @product.save
+      expect(@product).to be_valid
+    end
+
     it "name validation" do
       @category = Category.new(name: "fruit")
       @product = Product.new(price: 2, quantity: 4, category: @category)
+      @product.save
       expect(@product.valid?).to eql(false)
       expect(@product.errors.full_messages).to eql(["Name can't be blank"])
     end
