@@ -48,8 +48,6 @@ RSpec.describe User, type: :model do
           password_confirmation: 'surajeon')
   
         session = User.authenticate_with_credentials('sura@sura.com', 'surajeon')
-        puts session
-        puts user
         expect(session).to eq user
       end
   
